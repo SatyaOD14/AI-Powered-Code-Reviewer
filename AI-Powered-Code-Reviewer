@@ -1,0 +1,59 @@
+# ai_code_reviewer.py
+import streamlit as st
+import ast
+
+st.set_page_config(page_title="AI Code Reviewer", layout="wide")
+st.title("🤖 AI-Powered Code Reviewer")
+
+# -------------------------------
+# Code Input
+# -------------------------------
+st.subheader("Submit Your Python Code")
+code_input = st.text_area("Paste your Python code here:", height=200)
+
+if st.button("Review Code"):
+    if not code_input.strip():
+        st.warning("Please enter some code to review.")
+    else:
+        st.subheader("🔍 Review Results")
+
+        # -------------------------------
+        # 1. Syntax Check
+        # -------------------------------
+        try:
+            tree = ast.parse(code_input)
+            st.success("✅ Syntax: No errors found")
+        except SyntaxError as e:
+            st.error(f"❌ Syntax Error: {e}")
+        
+        # -------------------------------
+        # 2. Inefficiency Detection (Placeholder)
+        # -------------------------------
+        inefficiencies = []
+        if "for " in code_input and ".append(" in code_input:
+            inefficiencies.append("⚠️ Consider using list comprehensions instead of appending in loops for efficiency.")
+        if "import *" in code_input:
+            inefficiencies.append("⚠️ Avoid 'import *'; import only what you need.")
+        if "range(len(" in code_input:
+            inefficiencies.append("⚠️ Consider using 'enumerate()' instead of 'range(len(...))' for cleaner loops.")
+        if "print(" in code_input and "f'" not in code_input:
+            inefficiencies.append("💡 Use f-strings for better readability and performance.")
+
+        if inefficiencies:
+            for item in inefficiencies:
+                st.info(item)
+        else:
+            st.success("No obvious inefficiencies detected. Good job!")
+
+        # -------------------------------
+        # 3. Suggested Improvements (Placeholder NLP style)
+        # -------------------------------
+        st.subheader("💡 Suggested Improvements")
+        suggestions = [
+            "Consider adding docstrings to functions for better readability.",
+            "Use meaningful variable names for clarity.",
+            "Break down large functions into smaller, reusable components.",
+            "Add error handling for robustness."
+        ]
+        for s in suggestions:
+            st.write("- " + s)
